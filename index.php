@@ -4,8 +4,22 @@ include 'autoload.php';
 
 $configFile = 'config.php';
 
+// Ensure CSRF token is generated
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// Check if config.php exists and include it
 if (file_exists($configFile)) {
     include $configFile;
+
+    // Set session variables if they are not already set
+    if (!isset($_SESSION['db_host'])) {
+        $_SESSION['db_host'] = $db_host;
+        $_SESSION['db_name'] = $db_name;
+        $_SESSION['db_user'] = $db_user;
+        $_SESSION['db_pass'] = $db_pass;
+    }
 } else {
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['db_details'])) {
         $db_host = $_POST['db_host'];
@@ -20,6 +34,12 @@ if (file_exists($configFile)) {
         $configContent .= "\$db_pass = '$db_pass';\n";
 
         file_put_contents($configFile, $configContent);
+
+        // Set session variables
+        $_SESSION['db_host'] = $db_host;
+        $_SESSION['db_name'] = $db_name;
+        $_SESSION['db_user'] = $db_user;
+        $_SESSION['db_pass'] = $db_pass;
 
         header("Location: index.php");
         exit;
@@ -72,7 +92,7 @@ if (file_exists($configFile)) {
                 <label for="db_pass" class="form-label">Database Password</label>
                 <input type="password" class="form-control" id="db_pass" name="db_pass" required>
             </div>
-            <input type="hidden" name="csrf_token" value="'.$_SESSION['csrf_token'].'">
+            <input type="hidden" name="csrf_token" value="' . $_SESSION['csrf_token'] . '">
             <button type="submit" name="db_details" class="btn btn-primary w-100">Submit</button>
         </form>
     </div>
@@ -83,7 +103,7 @@ if (file_exists($configFile)) {
     }
 }
 
-$db = new Database($db_host, $db_name, $db_user, $db_pass);
+$db = new Database($_SESSION['db_host'], $_SESSION['db_name'], $_SESSION['db_user'], $_SESSION['db_pass']);
 $conn = $db->dbConnection();
 $db->createTable();
 ?>
