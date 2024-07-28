@@ -93,4 +93,4 @@ Contributions are welcome! Please open an issue or submit a pull request if you 
 
 - Inspired by various open-source projects and tutorials on PHP and Bootstrap.
 - This project utilized the assistance of ChatGPT.
-- Demo available at: [https://php-curd-app.demo.skd.xyz/](https://php-curd-app.demo.skd.xyz/)
+- Demo available at: [https://php-curd-app-demo.skd.xyz/](https://php-curd-app-demo.skd.xyz/)
