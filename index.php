@@ -2,25 +2,29 @@
 session_start();
 include 'autoload.php';
 
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-$csrf_token = $_SESSION['csrf_token'];
+$configFile = 'config.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['db_details'])) {
-    $_SESSION['db_host'] = $_POST['db_host'];
-    $_SESSION['db_name'] = $_POST['db_name'];
-    $_SESSION['db_user'] = $_POST['db_user'];
-    $_SESSION['db_pass'] = $_POST['db_pass'];
-}
+if (file_exists($configFile)) {
+    include $configFile;
+} else {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['db_details'])) {
+        $db_host = $_POST['db_host'];
+        $db_name = $_POST['db_name'];
+        $db_user = $_POST['db_user'];
+        $db_pass = $_POST['db_pass'];
 
-$db_host = $_SESSION['db_host'] ?? null;
-$db_name = $_SESSION['db_name'] ?? null;
-$db_user = $_SESSION['db_user'] ?? null;
-$db_pass = $_SESSION['db_pass'] ?? null;
+        $configContent = "<?php\n";
+        $configContent .= "\$db_host = '$db_host';\n";
+        $configContent .= "\$db_name = '$db_name';\n";
+        $configContent .= "\$db_user = '$db_user';\n";
+        $configContent .= "\$db_pass = '$db_pass';\n";
 
-if (!$db_host || !$db_name || !$db_user || !$db_pass) {
-    echo '<!DOCTYPE html>
+        file_put_contents($configFile, $configContent);
+
+        header("Location: index.php");
+        exit;
+    } else {
+        echo '<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -68,14 +72,15 @@ if (!$db_host || !$db_name || !$db_user || !$db_pass) {
                 <label for="db_pass" class="form-label">Database Password</label>
                 <input type="password" class="form-control" id="db_pass" name="db_pass" required>
             </div>
-            <input type="hidden" name="csrf_token" value="'.$csrf_token.'">
+            <input type="hidden" name="csrf_token" value="'.$_SESSION['csrf_token'].'">
             <button type="submit" name="db_details" class="btn btn-primary w-100">Submit</button>
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>';
-    exit;
+        exit;
+    }
 }
 
 $db = new Database($db_host, $db_name, $db_user, $db_pass);
