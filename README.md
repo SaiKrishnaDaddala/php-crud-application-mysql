@@ -1,6 +1,6 @@
-# PHP CRUD Application with Secure Input Handling and Modern UI
+# PHP CRUD Application with Secure Input Handling Basic UI and MySQL
 
-This is a PHP-based CRUD (Create, Read, Update, Delete) application with a modern UI built using Bootstrap and secure input handling to prevent SQL injection and other common vulnerabilities.
+This is a PHP-based CRUD (Create, Read, Update, Delete) application with a basic UI built using Bootstrap and secure input handling to prevent SQL injection and other common vulnerabilities.
 
 ## Features
 
@@ -35,7 +35,7 @@ This is a PHP-based CRUD (Create, Read, Update, Delete) application with a moder
     Import the provided `crud.sql` file into your MySQL database.
 
     ```bash
-    mysql -u SaiKrishnaDaddala -p yourdatabase < crud.sql
+    mysql -u yourusername -p yourdatabase < crud.sql
     ```
 
 4. **Configure the database connection**
@@ -87,9 +87,10 @@ Contributions are welcome! Please open an issue or submit a pull request if you 
 
 ## Author
 
-- **Your Name** - [SaiKrishnaDaddala](https://github.com/SaiKrishnaDaddala)
+- **Sai Krishna Daddala** - [SaiKrishnaDaddala](https://github.com/SaiKrishnaDaddala)
 
 ## Acknowledgments
 
 - Inspired by various open-source projects and tutorials on PHP and Bootstrap.
-- Also Used CHATGPT
+- This project utilized the assistance of ChatGPT.
+- Demo available at: [https://php-curd.demo.skd.xyz/](https://php-curd.demo.skd.xyz/)
